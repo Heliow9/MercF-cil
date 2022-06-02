@@ -13,10 +13,15 @@ export default function App() {
   const [result, setResult] = useState(0)
   const [codeBar, setCodeBar] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
+  const [isOpen, setOpen] = useState(false)
   const [dataList, setData] = useState([
     {
       name: 'Even - Creme Dental',
       codeBar: '7896013106968',
+      preco: '100'
+    },{
+      name: 'Nexel Tinta Refil Bulk Ink - Azul',
+      codeBar: '0606529679101',
       preco: '100'
     },
     // {
@@ -35,7 +40,7 @@ export default function App() {
     setResult(soma)
   }
 
-  
+
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
@@ -45,6 +50,7 @@ export default function App() {
     })
     if (result) {
       alert('O item escaneado é ' + result.name, 'o código dele é' + result.codeBar)
+      setOpen(false)
     } else {
       setModalVisible(true)
     }
@@ -78,6 +84,7 @@ export default function App() {
             <TextInput disabled={true} style={styles.input} placeholder="Produto Code" value={codeBar} />
             <TextInput disabled={true} style={styles.input} placeholder="Produto Preço" />
             <TouchableOpacity
+
               style={styles.buttonClose}
             >
               <Text style={styles.textStyle}>Cadastrar</Text>
@@ -111,13 +118,16 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.barCode}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-        {scanned && <Button title={'Aperte para escanear'} onPress={() => setScanned(false)} />}
-      </View>
+      {
+        isOpen ? <View style={styles.barCode}>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          />
+          {scanned && <Button title={'Aperte para escanear'} onPress={() => setScanned(false)} />}
+        </View> : <TouchableOpacity style={styles.OpenCam} onPress={() => setOpen(true)} ><Text>Abrir Câmera</Text></TouchableOpacity>
+      }
+
       <StatusBar style="auto" />
     </View>
   );
@@ -194,13 +204,22 @@ const styles = StyleSheet.create({
     width: 190,
     height: 28,
     borderRadius: 8,
-   
+
 
 
   },
-  textStyle:{
+  textStyle: {
     color: '#fff',
-    fontSize:15,
+    fontSize: 15,
+  },
+
+  OpenCam: {
+    marginTop: 27,
+    backgroundColor: '#DAF7A6',
+    width: 210,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 
 });
